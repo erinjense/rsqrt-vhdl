@@ -1,0 +1,10 @@
+*.bat
+*.qip
+*.mpf
+*.mti
+*.tcl
+*.log
+*.cmp
+*.ini
+transcript
+work

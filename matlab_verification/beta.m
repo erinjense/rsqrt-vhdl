@@ -1,4 +1,4 @@
-function [beta_out] = beta(Zin)
+function beta_out = beta(Zin)
 
 % Z is the amount of leading zeros
 % W is the number of bits in fixed-point word
