@@ -6,5 +6,13 @@
 *.log
 *.cmp
 *.ini
+*.wlf
+*.asv
+*.jpg
+hdlcosim*
+hdlverifier*
+compile_hdl*
+launch_hdl*
 transcript
 work
+wlf*

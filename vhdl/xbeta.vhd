@@ -12,40 +12,27 @@ entity xbeta is
 end xbeta;
 
 architecture behavioral of xbeta is
-    signal Xb_u  : unsigned(33 downto 0);
-    signal X_u1  : unsigned(33 downto 0);
-    signal X_u2  : unsigned(33 downto 0);
-    signal X_u3  : unsigned(33 downto 0);
-    signal B_u2  : unsigned(9 downto 0);
-    signal B_u3  : unsigned(9 downto 0);
-    signal B_s1  : signed(9 downto 0);
-    signal B_abs : signed(9 downto 0);
-    signal B_i3  : integer range 0 to 17;
+    signal X_u  : unsigned(33 downto 0);
+    signal B_s  : signed(9 downto 0);
+    signal B_i  : integer range 0 to 17;
 
 begin
-    -- 9 clock cycles at output
+
     process(clk)
         begin
             if rising_edge(clk) then
                 -- Clock: 1
-                X_u1 <= unsigned(X_in);
-                B_s1 <= signed(Beta_in);
+               X_u <= unsigned(X_in);
+               B_s <= signed(Beta_in);
+               B_i <= to_integer(abs(signed(Beta_in)));
                 -- Clock 2
-                X_u2  <= X_u1;
-                B_abs <= abs(B_s1);
-                B_u2  <= unsigned(B_s1);
-                -- Clock 3
-                X_u3  <= X_u2;
-                B_u3  <= B_u2;
-                B_i3 <= to_integer(B_abs);
-                -- Clock 4
-               if (B_u3(B_u3'length-1) = '1') then
-                    Xb_u <= shift_left(X_u3,B_i3);
+               if (B_s(B_s'length-1) = '1') then
+                    Xbeta_out <= std_logic_vector( shift_left(X_u, B_i) );
                else
-                    Xb_u <= shift_right(X_u3,B_i3);
+                    Xbeta_out <= std_logic_vector( shift_right(X_u, B_i) );
                end if;
-               Xbeta_out <= std_logic_vector(Xb_u);
 
             end if;
     end process;
+
 end behavioral;
