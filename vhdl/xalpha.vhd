@@ -12,13 +12,13 @@ entity xalpha is
 end xalpha;
 
 architecture behavioral of xalpha is
-    signal A_s  : signed(11 downto 0);
-    signal A_u  : unsigned(11 downto 0);
+    signal A_s   : signed(11 downto 0);
+    signal A_u   : unsigned(11 downto 0);
     signal A_u1  : unsigned(11 downto 0);
-    signal A_abs  : signed(11 downto 0);
-    signal A_i  : integer range 0 to 26;
-    signal Xa_u : unsigned(33 downto 0);
-    signal X_u  : unsigned(33 downto 0);
+    signal A_abs : signed(11 downto 0);
+    signal A_i   : integer range 0 to 26;
+    signal Xa_u  : unsigned(33 downto 0);
+    signal X_u   : unsigned(33 downto 0);
 
 begin
     process(clk)

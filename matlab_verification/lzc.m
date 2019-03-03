@@ -1,4 +1,4 @@
-function [lzc_count] = lzc(lzc_vect)
+function lzc_count = lzc(lzc_vect)
 
 % Isolate each bit from lzc_vect
 b1 = bitget(lzc_vect,1);

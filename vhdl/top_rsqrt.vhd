@@ -5,9 +5,9 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity top_rsqrt is
     port(
-        Clk   : in    std_logic;
-        X_in  : in    std_logic_vector(33 downto 0);
-        Yout    : out   std_logic_vector(33 downto 0)
+        Clk  : in    std_logic;
+        X_in : in    std_logic_vector(33 downto 0);
+        Yout : out   std_logic_vector(33 downto 0)
     );
 end top_rsqrt;
 
@@ -23,64 +23,64 @@ architecture behavioral of top_rsqrt is
 
     component alpha is
         port (
-            clk      : in std_logic;
-            Beta_in  : in std_logic_vector(9 downto 0);
+            clk       : in  std_logic;
+            Beta_in   : in  std_logic_vector(9 downto 0);
             Alpha_out : out std_logic_vector(11 downto 0)
      );
     end component alpha;
 
     component xalpha is
         port (
-            clk        : in std_logic;
-            X_in       : in std_logic_vector(33 downto 0);
-            Alpha_in   : in std_logic_vector(11 downto 0);
+            clk        : in  std_logic;
+            X_in       : in  std_logic_vector(33 downto 0);
+            Alpha_in   : in  std_logic_vector(11 downto 0);
             Xalpha_out : out std_logic_vector(33 downto 0)
         );
     end component xalpha;
 
-	component beta is
+    component beta is
         port (
-            clk         :   in std_logic;
-            lzc_count   :   in  std_logic_vector(5 downto 0);
-            Beta        :   out std_logic_vector(9 downto 0)
+            clk       : in  std_logic;
+            lzc_count : in  std_logic_vector(5 downto 0);
+            Beta      : out std_logic_vector(9 downto 0)
         );
     end component beta;
 
     component xbeta is
         port (
-            clk       : in std_logic;
-            X_in      : in std_logic_vector(33 downto 0);
-            Beta_in   : in std_logic_vector(9 downto 0);
+            clk       : in  std_logic;
+            X_in      : in  std_logic_vector(33 downto 0);
+            Beta_in   : in  std_logic_vector(9 downto 0);
             Xbeta_out : out std_logic_vector(33 downto 0)
         );
     end component xbeta;
 
     component xbeta_rom is
         port (
-            address	: in STD_LOGIC_VECTOR (7 downto 0);
-            clock	: in STD_LOGIC;
-            q		: out STD_LOGIC_VECTOR (7 downto 0)
+            address	: in  std_logic_vector (7 downto 0);
+            clock	: in  std_logic;
+            q		: out std_logic_vector (7 downto 0)
         );
     end component xbeta_rom;
 
     component guess is
         port (
-            clk       : std_logic;
-            Xalpha_in : in std_logic_vector(33 downto 0);
-            Xbeta_rom_in  : in std_logic_vector(7 downto 0);
-            Beta_in   : in std_logic_vector(9 downto 0);
-            guess     : out std_logic_vector(33 downto 0)
+            clk          : in  std_logic;
+            Xalpha_in    : in  std_logic_vector(33 downto 0);
+            Xbeta_rom_in : in  std_logic_vector(7 downto 0);
+            Beta_in      : in  std_logic_vector(9 downto 0);
+            guess        : out std_logic_vector(33 downto 0)
         );
     end component guess;
 
-    component rsqrt is
+    component newton_method is
         port (
-            clk             : std_logic;
-            Yn_in          : in std_logic_vector(33 downto 0);
-            X_in            : in std_logic_vector(33 downto 0);
-            rsqrt_out       : out std_logic_vector(33 downto 0)
+            clk       : in  std_logic;
+            Yn_in     : in  std_logic_vector(33 downto 0);
+            X_in      : in  std_logic_vector(33 downto 0);
+            rsqrt_out : out std_logic_vector(33 downto 0)
         );
-    end component rsqrt;
+    end component newton_method;
 
     signal Z_lzc_beta   : std_logic_vector(5 downto 0);
     signal A_alpha      : std_logic_vector(11 downto 0);
@@ -312,23 +312,22 @@ begin
 
     Yout <= Y4; 
 
-    U1 : component lzc   port map(clk, X_in, Z_lzc_beta);
-    U2 : component alpha port map(clk, B_beta, A_alpha);
-    U3 : component xalpha port map(clk, X_d22, A_alpha, Xa_xalpha);
+    U1  : component lzc    port map(clk, X_in, Z_lzc_beta);
+    U2  : component alpha  port map(clk, B_beta, A_alpha);
+    U3  : component xalpha port map(clk, X_d22, A_alpha, Xa_xalpha);
     -- 3 clock cycles
-    U4 : component beta  port map(clk, Z_lzc_beta, B_beta);
+    U4  : component beta  port map(clk, Z_lzc_beta, B_beta);
     -- 9 clock cycles
-    U5 : component xbeta port map(clk, X_d8, B_beta, Xb_xbeta);
-    U6 : component xbeta_rom port map (Xbeta_addr, clk, Xb_rom);
+    U5  : component xbeta port map(clk, X_d8, B_beta, Xb_xbeta);
+    U6  : component xbeta_rom port map (Xbeta_addr, clk, Xb_rom);
 
-    U7 : component guess port map (clk, Xa_xalpha, Xbr_d9, B_d21, Y0);
+    U7  : component guess port map (clk, Xa_xalpha, Xbr_d9, B_d21, Y0);
     -- 21 clock cycles
-    U8 : component rsqrt port map (clk, Y0, X_d33, Y1);
+    U8  : component newton_method port map (clk, Y0, X_d33, Y1);
     -- 25 clock cycles
-    U9  : component rsqrt port map (clk, Y1, X_d41, Y2);
+    U9  : component newton_method port map (clk, Y1, X_d41, Y2);
     -- 29 clock cycles
-    U10 : component rsqrt port map (clk, Y2, X_d49, Y3);
-    U11 : component rsqrt port map (clk, Y3, X_d57, Y4);
-
+    U10 : component newton_method port map (clk, Y2, X_d49, Y3);
+    U11 : component newton_method port map (clk, Y3, X_d57, Y4);
 
 end behavioral;

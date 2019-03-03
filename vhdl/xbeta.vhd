@@ -12,14 +12,14 @@ entity xbeta is
 end xbeta;
 
 architecture behavioral of xbeta is
-    signal Xb_u   : unsigned(33 downto 0);
-    signal X_u1   : unsigned(33 downto 0);
-    signal X_u2   : unsigned(33 downto 0);
-    signal X_u3   : unsigned(33 downto 0);
-    signal B_u2   : unsigned(9 downto 0);
-    signal B_u3   : unsigned(9 downto 0);
-    signal B_s1   : signed(9 downto 0);
-    signal B_abs  : signed(9 downto 0);
+    signal Xb_u  : unsigned(33 downto 0);
+    signal X_u1  : unsigned(33 downto 0);
+    signal X_u2  : unsigned(33 downto 0);
+    signal X_u3  : unsigned(33 downto 0);
+    signal B_u2  : unsigned(9 downto 0);
+    signal B_u3  : unsigned(9 downto 0);
+    signal B_s1  : signed(9 downto 0);
+    signal B_abs : signed(9 downto 0);
     signal B_i3  : integer range 0 to 17;
 
 begin

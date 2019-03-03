@@ -18,7 +18,7 @@ architecture behavioral of beta is
     constant F : signed(9 downto 0) := "0000010001";  -- 17
 
 begin
-    -- 4 clock cycles to output
+
    process(clk)
       begin
         if rising_edge(clk) then
@@ -28,4 +28,4 @@ begin
         end if;
     end process;
     
- end behavioral;
+end behavioral;
